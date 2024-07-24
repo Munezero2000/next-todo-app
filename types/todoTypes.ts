@@ -3,6 +3,6 @@ export type todoType = {
   title: string;
   description: string;
   completed: boolean;
-  createAt: Date;
+  createdAt: Date;
   updatedAt: Date;
 };
