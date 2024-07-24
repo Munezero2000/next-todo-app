@@ -1,15 +1,14 @@
-import { Input } from "@/components/ui/input";
 import React from "react";
+import AddTodo from "@/components/AddTodo";
+import Todos from "@/components/Todos";
 
-const page = () => {
+const Page = () => {
   return (
-    <div className="flex w-1/2 p-4">
-      <div className="flex flex-col items-center justify-center">
-        <Input className="outline-none my-4" placeholder="Title" />
-        <Input placeholder="Description" />
-      </div>
+    <div className="flex md:w-3/4 p-4 mx-auto flex-col items-center">
+      <AddTodo />
+      <Todos />
     </div>
   );
 };
 
-export default page;
+export default Page;
