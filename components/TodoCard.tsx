@@ -4,6 +4,7 @@ import { todoType } from "@/types/todoTypes";
 import DeleteTodo from "./DeleteTodo";
 import { Checkbox } from "./ui/checkbox";
 import { toggleTodo } from "@/app/actions/action";
+import SubmitButton from "./SubmitButton";
 
 interface Props {
   todo: todoType;

@@ -6,7 +6,7 @@ import { Textarea } from "./ui/textarea";
 import { Label } from "@radix-ui/react-label";
 import { createTodo } from "@/app/actions/action";
 import { toast } from "./ui/use-toast";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import SubmitButton from "./SubmitButton";
 
 const initialState: { message: string | null } = {
