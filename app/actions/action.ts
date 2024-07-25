@@ -1,13 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { SignJWT } from "jose";
 import db from "@/db/drizzle";
 import { todo } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
+const key = new TextEncoder().encode(process.env.NEXT_AUTH_SECRET!);
+
 // Validating inputs with zod
 
-export async function createTodo(prevState: any, formData: FormData) {
+export async function createTodo(
+  prevState: { message: string | null },
+  formData: FormData
+) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
 
@@ -33,4 +39,25 @@ export async function deleteTodo(prevState: any, formData: FormData) {
   } catch (e) {
     return { message: "Failed to delete todo" };
   }
+}
+
+export async function encrypt(payload: any) {
+  // this function will encrypt the pay load and give a token back
+  return new SignJWT(payload)
+    .setProtectedHeader({ alg: "H256" })
+    .setIssuedAt()
+    .setExpirationTime("10 sec from now")
+    .sign(key);
+}
+
+export async function login(formData: FormData) {
+  // talk to the database and get user data
+  const user = {
+    email: formData.get("email"),
+    password: formData.get("password"),
+  };
+
+  // calculate session expration time and set the variable
+  const expires = new Date(Date.now() + 10 * 1000);
+  const session = await encrypt({ user, expires });
 }

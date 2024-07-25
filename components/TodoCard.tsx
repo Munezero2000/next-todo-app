@@ -1,7 +1,6 @@
 "use client";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import React from "react";
-import { Button } from "./ui/button";
 import { todoType } from "@/types/todoTypes";
 import DeleteTodo from "./DeleteTodo";
 
@@ -12,7 +11,7 @@ interface Props {
 const TodoCard = ({ todo }: Props) => {
   return (
     <div className="bg-slate-100 flex p-2 items-center justify-between rounded-md my-2">
-      <Checkbox className="bg-black" />
+      <Checkbox />
       <div className="w-3/4">
         <p>{todo.title} </p>
         <p className="text-sm">{todo.description}</p>

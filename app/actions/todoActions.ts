@@ -1,7 +1,8 @@
+"use actions";
 import db from "@/db/drizzle";
 import { todo } from "@/db/schema";
 import { todoType } from "@/types/todoTypes";
-import { asc, desc } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { eq, not } from "drizzle-orm";
 
 export const getTodo = async (): Promise<todoType[]> => {

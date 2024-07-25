@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { Label } from "@radix-ui/react-label";
 import { createTodo } from "@/app/actions/action";
 import { toast } from "./ui/use-toast";
 import { useFormState, useFormStatus } from "react-dom";
+import SubmitButton from "./SubmitButton";
 
 const initialState: { message: string | null } = {
   message: null,
@@ -15,13 +15,6 @@ const initialState: { message: string | null } = {
 
 const AddTodo = () => {
   const [state, formAction] = useFormState(createTodo, initialState);
-  const { pending } = useFormStatus();
-
-  useEffect(() => {
-    toast({
-      title: state?.message!,
-    });
-  }, [state]);
 
   return (
     <form action={formAction} className="w-full space-y-2">
@@ -45,9 +38,7 @@ const AddTodo = () => {
           placeholder="Type your todo description here."
         />
       </div>
-      <Button disabled={pending} type="submit">
-        Add Todo
-      </Button>
+      <SubmitButton buttonText="Add Todo" />
     </form>
   );
 };
