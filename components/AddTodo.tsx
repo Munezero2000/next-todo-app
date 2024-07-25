@@ -12,7 +12,7 @@ import SubmitButton from "./SubmitButton";
 const initialState: { message: string | null } = {
   message: null,
 };
-
+ 
 const AddTodo = () => {
   const [state, formAction] = useFormState(createTodo, initialState);
 
@@ -22,7 +22,7 @@ const AddTodo = () => {
 
   return (
     <form action={formAction} className="w-full space-y-2">
-      <h1 className="text-xl uppercase font-bold text-center">
+      <h1 className="text-xl bg-slate-950 hover:cursor-pointer text-white py-3 rounded-sm uppercase font-bold text-center">
         Todo List Application
       </h1>
       <div className="grid w-full gap-1.5">

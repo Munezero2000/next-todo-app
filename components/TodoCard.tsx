@@ -19,7 +19,7 @@ const TodoCard = ({ todo }: Props) => {
   };
 
   return (
-    <div className="bg-slate-100 flex p-2 items-center justify-between rounded-md my-2">
+    <div className="bg-slate-100 shadow-sm flex p-2 items-center justify-between rounded-md my-2">
       <div className="flex items-center justify-center min-w-8 lg:min-w-16">
         <Checkbox
           checked={isChecked}
