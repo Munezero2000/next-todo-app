@@ -4,11 +4,16 @@ import { revalidatePath } from "next/cache";
 import { SignJWT } from "jose";
 import db from "@/db/drizzle";
 import { todo } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, not } from "drizzle-orm";
+import { z } from "zod";
 
 const key = new TextEncoder().encode(process.env.NEXT_AUTH_SECRET!);
 
 // Validating inputs with zod
+const schema = z.object({
+  title: z.string().min(1).max(300),
+  description: z.string().optional(),
+});
 
 export async function createTodo(
   prevState: { message: string | null },
@@ -16,6 +21,12 @@ export async function createTodo(
 ) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
+
+  const parse = schema.safeParse({ title, description });
+
+  if (!parse.success) {
+    return { message: "✂️Todo is required" };
+  }
 
   try {
     await db.insert(todo).values({ title, description }).returning();
@@ -40,6 +51,22 @@ export async function deleteTodo(prevState: any, formData: FormData) {
     return { message: "Failed to delete todo" };
   }
 }
+
+export const toggleTodo = async (id: string) => {
+  try {
+    await db
+      .update(todo)
+      .set({
+        completed: not(todo.completed),
+      })
+      .where(eq(todo.id, id));
+    revalidatePath("/");
+
+    return { message: "Successfully Marked" };
+  } catch (e) {
+    return { message: "Failed to update todo" };
+  }
+};
 
 export async function encrypt(payload: any) {
   // this function will encrypt the pay load and give a token back

@@ -2,11 +2,14 @@
 import db from "@/db/drizzle";
 import { todo } from "@/db/schema";
 import { todoType } from "@/types/todoTypes";
-import { desc } from "drizzle-orm";
+import { asc, desc } from "drizzle-orm";
 import { eq, not } from "drizzle-orm";
 
 export const getTodo = async (): Promise<todoType[]> => {
-  return await db.select().from(todo).orderBy(desc(todo.createdAt));
+  return await db
+    .select()
+    .from(todo)
+    .orderBy(asc(todo.completed), desc(todo.createdAt));
 };
 
 export const editTodo = async (

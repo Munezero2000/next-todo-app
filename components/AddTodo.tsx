@@ -16,6 +16,10 @@ const initialState: { message: string | null } = {
 const AddTodo = () => {
   const [state, formAction] = useFormState(createTodo, initialState);
 
+  useEffect(() => {
+    toast({ title: state?.message! });
+  }, [state]);
+
   return (
     <form action={formAction} className="w-full space-y-2">
       <h1 className="text-xl uppercase font-bold text-center">
