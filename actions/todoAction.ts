@@ -4,16 +4,24 @@ import { revalidatePath } from "next/cache";
 import { SignJWT } from "jose";
 import db from "@/db/drizzle";
 import { todo } from "@/db/schema";
-import { eq, not } from "drizzle-orm";
+import { asc, desc, eq, not } from "drizzle-orm";
 import { z } from "zod";
-
-const key = new TextEncoder().encode(process.env.NEXT_AUTH_SECRET!);
+import { todoType } from "@/types/todoTypes";
 
 // Validating inputs with zod
 const schema = z.object({
   title: z.string().min(1).max(300),
   description: z.string().optional(),
 });
+
+export const getTodo = async (): Promise<todoType[]> => {
+  const todos = await db
+    .select()
+    .from(todo)
+    .orderBy(asc(todo.completed), desc(todo.createdAt));
+
+  return todos;
+};
 
 export async function createTodo(
   prevState: { message: string | null },
@@ -52,6 +60,37 @@ export async function deleteTodo(prevState: any, formData: FormData) {
   }
 }
 
+export async function updateTodo(
+  prevState: { message: string | null },
+  formData: FormData
+) {
+  const id = formData.get("id") as string;
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+
+  const parse = schema.safeParse({ title, description });
+
+  if (!parse.success) {
+    return { message: "✂️Todo is required" };
+  }
+
+  try {
+    await db
+      .update(todo)
+      .set({
+        title,
+        description,
+      })
+      .where(eq(todo.id, id));
+
+    revalidatePath("/");
+    return { message: "Todo updated successfully" };
+  } catch (e) {
+    console.log(e);
+    return { message: "Failed to update todo" };
+  }
+}
+
 export const toggleTodo = async (id: string) => {
   try {
     await db
@@ -67,24 +106,3 @@ export const toggleTodo = async (id: string) => {
     return { message: "Failed to update todo" };
   }
 };
-
-export async function encrypt(payload: any) {
-  // this function will encrypt the pay load and give a token back
-  return new SignJWT(payload)
-    .setProtectedHeader({ alg: "H256" })
-    .setIssuedAt()
-    .setExpirationTime("10 sec from now")
-    .sign(key);
-}
-
-export async function login(formData: FormData) {
-  // talk to the database and get user data
-  const user = {
-    email: formData.get("email"),
-    password: formData.get("password"),
-  };
-
-  // calculate session expration time and set the variable
-  const expires = new Date(Date.now() + 10 * 1000);
-  const session = await encrypt({ user, expires });
-}

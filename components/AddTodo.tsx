@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "@radix-ui/react-label";
-import { createTodo } from "@/app/actions/action";
+import { createTodo} from "@/actions/todoAction";
 import { toast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
 import SubmitButton from "./SubmitButton";
@@ -12,7 +12,11 @@ import SubmitButton from "./SubmitButton";
 const initialState: { message: string | null } = {
   message: null,
 };
- 
+
+interface Props {
+  isEditing?: boolean;
+}
+
 const AddTodo = () => {
   const [state, formAction] = useFormState(createTodo, initialState);
 
@@ -21,10 +25,10 @@ const AddTodo = () => {
   }, [state]);
 
   return (
-    <form action={formAction} className="w-full space-y-2">
-      <h1 className="text-xl bg-slate-950 hover:cursor-pointer text-white py-3 rounded-sm uppercase font-bold text-center">
-        Todo List Application
-      </h1>
+    <form
+      action={formAction}
+      className="w-full space-y-2 border rounded-lg p-2"
+    >
       <div className="grid w-full gap-1.5">
         <Label htmlFor="message">Title</Label>
         <Input

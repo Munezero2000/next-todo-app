@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { Input } from "./ui/input";
 import { useFormState, useFormStatus } from "react-dom";
-import { deleteTodo } from "@/app/actions/action";
+import { deleteTodo } from "@/actions/todoAction";
 import SubmitButton from "./SubmitButton";
 
 const initialState: { message: string | null } = {
