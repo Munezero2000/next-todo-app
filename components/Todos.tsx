@@ -1,6 +1,6 @@
 import React from "react";
 import TodoCard from "./TodoCard";
-import { getTodo } from "@/actions/todoAction";
+import { getTodo } from "@/actions/todo";
 
 export default async function Todos() {
   const todos = await getTodo();
