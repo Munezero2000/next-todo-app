@@ -6,9 +6,14 @@ import { todo } from "@/db/schema";
 import { asc, desc, eq, not } from "drizzle-orm";
 import { todoType } from "@/types/todoTypes";
 import { FormState, todoSchema } from "./definitions";
+import { getUser } from "@/lib/dal";
 
-export const getTodo = async (): Promise<todoType[]> => {
-  const todos = await db.select().from(todo).orderBy(asc(todo.completed), desc(todo.createdAt));
+export const getTodo = async (id: string): Promise<todoType[]> => {
+  const todos = await db
+    .select()
+    .from(todo)
+    .where(eq(todo.createdBy, id))
+    .orderBy(asc(todo.completed), desc(todo.createdAt));
   return todos;
 };
 
@@ -27,10 +32,11 @@ export async function createTodo(state: FormState, formData: FormData): Promise<
   }
 
   const { title, description } = validatedFields.data;
+  const user = await getUser();
 
   // saving data to the database
   try {
-    const returnedTodo = await db.insert(todo).values({ title, description }).returning();
+    const returnedTodo = await db.insert(todo).values({ title, description, createdBy: user?.id }).returning();
 
     if (returnedTodo) {
       revalidatePath("/");

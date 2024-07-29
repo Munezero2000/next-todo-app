@@ -49,7 +49,7 @@ export async function signup(state: FormState, formData: FormData): Promise<Form
       message: "An error occurred while creating your account.",
     };
   } else {
-    redirect("/auth/login?message='Account created successfully'");
+    redirect("/auth/login?message=Account created successfully");
   }
 }
 
