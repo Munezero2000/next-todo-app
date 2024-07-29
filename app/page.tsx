@@ -7,7 +7,7 @@ const page = () => {
     <div className="flex flex-col gap-6 items-center justify-center mt-64">
       <p>Welcome to the Next todo app</p>
       <div>
-        <Link href="/todos">
+        <Link href="/auth/login">
           <Button>Get Started</Button>
         </Link>
       </div>

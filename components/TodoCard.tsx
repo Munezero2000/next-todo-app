@@ -54,7 +54,7 @@ const TodoCard = ({ todo }: Props) => {
           <DeleteTodo id={todo.id} />
         </div>
       </div>
-      {isEditing && <UpdateTodo todo={todo} />}
+      {/* {isEditing && <UpdateTodo todo={todo} />} */}
     </div>
   );
 };

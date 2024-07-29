@@ -26,7 +26,7 @@ export async function signup(state: FormState, formData: FormData): Promise<Form
   const { name, email, password } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
   const checkUser = await db.select().from(users).where(eq(users.email, email));
-  console.log(checkUser);
+
   if (checkUser.length > 0) {
     return {
       message: "This is email has been taken use another email",
@@ -73,7 +73,6 @@ export async function login(state: LoginFormState, formData: FormData): Promise<
     return { message: "Invalid email or password." };
   }
   const loggedUser = user[0];
-  console.log(loggedUser);
 
   // 3. Compare the user's password with the hashed password in the database
   const passwordMatch = await bcrypt.compare(validatedFields.data.password, loggedUser.password);

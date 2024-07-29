@@ -1,3 +1,4 @@
+"use server";
 import "server-only";
 
 import { cookies } from "next/headers";
@@ -13,7 +14,7 @@ export const verifySession = cache(async () => {
   const session = await decrypt(cookie);
 
   if (!session?.userId) {
-    redirect("/login");
+    redirect("/");
   }
 
   return { isAuth: true, userId: session.userId as string };

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { createTodo } from '@/actions/todo';
-import { toast } from './ui/use-toast';
-import { useFormState } from 'react-dom';
-import SubmitButton from './SubmitButton';
-import { Label } from './ui/label';
+import React, { useEffect, useState } from "react";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { createTodo } from "@/actions/todo";
+import { toast } from "./ui/use-toast";
+import { useFormState } from "react-dom";
+import SubmitButton from "./SubmitButton";
+import { Label } from "./ui/label";
 
 const AddTodo = () => {
   const [state, formAction] = useFormState(createTodo, undefined);
