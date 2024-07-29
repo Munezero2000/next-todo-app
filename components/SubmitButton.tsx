@@ -12,7 +12,7 @@ export default function SubmitButton({ buttonText }: Props) {
   return (
     <Button
       disabled={pending}
-      className={buttonText.toLowerCase() === "delete" ? "bg-red-900" : ""}
+      className={buttonText.toLowerCase() === "delete" ? "bg-red-900 hover:bg-red-800" : ""}
       aria-disabled={pending}
       type="submit"
     >
