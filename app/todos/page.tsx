@@ -12,7 +12,6 @@ const Page = () => {
       >
         Todo List Application
       </Link>
-      <h1></h1>
       <AddTodo />
       <Todos />
     </div>
