@@ -8,6 +8,9 @@ import { Button } from "./ui/button";
 import clsx from "clsx";
 import UpdateTodo from "./UpdateTodo";
 import { formatDate } from "@/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { PopoverClose } from "@radix-ui/react-popover";
+import { toast } from "./ui/use-toast";
 
 interface Props {
   todo: todoType;
@@ -19,7 +22,8 @@ const TodoCard = ({ todo }: Props) => {
 
   const handleCheckboxChange = async () => {
     setIsChecked(!isChecked);
-    await toggleTodo(todo.id);
+    const result = await toggleTodo(todo.id);
+    toast({ title: result.message });
   };
 
   const handleEditClick = () => {
@@ -47,13 +51,28 @@ const TodoCard = ({ todo }: Props) => {
         <div className="w-3/4">
           <p>{todo.title}</p>
           <p className="text-sm">{todo.description}</p>
-          <p className="text-xs text-slate-700">{`Created At: ${formattedDate}`}</p>
+          <p className="text-xs text-slate-700">{`${formattedDate}`}</p>
         </div>
         <div className="flex gap-2 transition-all ease-in-out">
           <Button onClick={handleEditClick}>
             {isEditing ? "Close" : "Edit"}
           </Button>
-          <DeleteTodo id={todo.id} />
+          <Popover>
+            <PopoverTrigger className="bg-red-900 hover:bg-red-800 px-2 text-white rounded sm">
+              Delete
+            </PopoverTrigger>
+            <PopoverContent>
+              <p className="text-sm text-slate-900 my-2">
+                Are you sure you want to delete this todo ?
+              </p>
+              <div className="flex justify-between">
+                <PopoverClose className="bg-slate-950 px-2 text-white rounded sm hover:bg-slate-900">
+                  Cancel
+                </PopoverClose>
+                <DeleteTodo id={todo.id} />
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
       {isEditing && <UpdateTodo todo={todo} />}
