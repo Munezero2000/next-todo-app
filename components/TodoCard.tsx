@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import UpdateTodo from "./UpdateTodo";
+import { toast } from "./ui/use-toast";
 
 interface Props {
   todo: todoType;
@@ -61,7 +62,7 @@ const TodoCard = ({ todo }: Props) => {
             <DialogTrigger className="bg-slate-950 hover:bg-slate-900 px-4 py-2 text-white rounded sm">
               Edit
             </DialogTrigger>
-            <DialogContent >
+            <DialogContent>
               <DialogHeader>
                 <DialogTitle>Update Todo</DialogTitle>
                 <DialogDescription>
