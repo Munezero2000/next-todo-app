@@ -28,7 +28,8 @@ const TodoCard = ({ todo }: Props) => {
 
   const handleCheckboxChange = async () => {
     setIsChecked(!isChecked);
-    await toggleTodo(todo.id);
+    const result = await toggleTodo(todo.id);
+    toast({ title: result.message });
   };
 
   const formattedDate = formatDate(todo.createdAt);
@@ -53,7 +54,7 @@ const TodoCard = ({ todo }: Props) => {
         <div className="w-3/4">
           <p>{todo.title}</p>
           <p className="text-sm">{todo.description}</p>
-          <p className="text-xs text-slate-700">{`Created At: ${formattedDate}`}</p>
+          <p className="text-xs text-slate-700">{`${formattedDate}`}</p>
         </div>
         <div className="flex gap-2 transition-all ease-in-out">
           <Dialog>
