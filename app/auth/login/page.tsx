@@ -21,7 +21,7 @@ const LoginForm = () => {
         <h1 className="text-xl font-semibold text-center"> Login Here</h1>
         <div className="grid w-full gap-1.5">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email"  className="" placeholder="Enter your email" />
+          <Input id="email" name="email" className="" placeholder="Enter your email" />
           <div> {state?.errors?.email && <p className="text-sm text-red-500">{state.errors.email}</p>}</div>
         </div>
         <div className="grid w-full gap-1.5">

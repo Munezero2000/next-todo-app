@@ -1,6 +1,5 @@
 "use client";
 import { logout } from "@/actions/auth";
-import { redirect } from "next/navigation";
 import React from "react";
 import { Button } from "./ui/button";
 
