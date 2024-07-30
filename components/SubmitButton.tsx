@@ -5,24 +5,24 @@ import { Loader2 } from "lucide-react";
 
 interface Props {
   buttonText: string;
+  isValid?: boolean;
 }
 
-export default function SubmitButton({ buttonText }: Props) {
+export default function SubmitButton({ buttonText, isValid = true }: Props) {
   const { pending } = useFormStatus();
+  const isDelete = buttonText.toLowerCase() === "delete";
+  const buttonClasses = isDelete ? "bg-red-900 hover:bg-red-800" : "";
+  const buttonWidth = `${buttonText.length * 0.6 + 1}rem`;
+
   return (
     <Button
-      disabled={pending}
-      className={buttonText.toLowerCase() === "delete" ? "bg-red-900 hover:bg-red-800" : ""}
-      aria-disabled={pending}
+      disabled={pending || !isValid}
+      className={buttonClasses}
+      aria-disabled={pending || !isValid}
       type="submit"
+      style={{ width: buttonWidth }}
     >
-      {pending ? (
-        <Button disabled>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        </Button>
-      ) : (
-        buttonText
-      )}
+      {pending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : buttonText}
     </Button>
   );
 }

@@ -1,16 +1,19 @@
 "use server";
 import db from "@/db/drizzle";
-import { FormState, LoginFormSchema, LoginFormState } from "./definitions";
-import { SignupSchema } from "./definitions";
+import { FormState, LoginFormState, loginSchema } from "./definitions";
+import { signupSchema } from "./definitions";
 import bcrypt from "bcrypt";
 import { users } from "@/db/schema";
 import { createSession, deleteSession } from "@/actions/auth/session";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
-export async function signup(state: FormState, formData: FormData): Promise<FormState> {
+export async function signup(
+  state: FormState,
+  formData: FormData
+): Promise<FormState> {
   // Validate form fields
-  const validatedFields = SignupSchema.safeParse({
+  const validatedFields = signupSchema.safeParse({
     name: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
@@ -53,9 +56,12 @@ export async function signup(state: FormState, formData: FormData): Promise<Form
   }
 }
 
-export async function login(state: LoginFormState, formData: FormData): Promise<LoginFormState> {
+export async function login(
+  state: LoginFormState,
+  formData: FormData
+): Promise<LoginFormState> {
   // 1. Validate form fields
-  const validatedFields = LoginFormSchema.safeParse({
+  const validatedFields = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
@@ -68,14 +74,20 @@ export async function login(state: LoginFormState, formData: FormData): Promise<
   }
 
   // 2. Query the database for the user with the given email
-  const user = await db.select().from(users).where(eq(users.email, validatedFields.data.email));
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, validatedFields.data.email));
   if (user.length === 0) {
     return { message: "Invalid email or password." };
   }
   const loggedUser = user[0];
 
   // 3. Compare the user's password with the hashed password in the database
-  const passwordMatch = await bcrypt.compare(validatedFields.data.password, loggedUser.password);
+  const passwordMatch = await bcrypt.compare(
+    validatedFields.data.password,
+    loggedUser.password
+  );
 
   // If the password does not match, return early
   if (!passwordMatch) {

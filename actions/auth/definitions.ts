@@ -1,7 +1,10 @@
 import { z } from "zod";
 
-export const SignupSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters long." }).trim(),
+export const signupSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long." })
+    .trim(),
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
   password: z
     .string()
@@ -25,10 +28,12 @@ export type FormState =
     }
   | undefined;
 
-export const LoginFormSchema = z.object({
+export const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
   password: z.string().min(1, { message: "Password field must not be empty." }),
 });
+
+export type LoginFormData = z.infer<typeof loginSchema>;
 
 export type LoginFormState =
   | {

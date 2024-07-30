@@ -1,13 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { createTodo } from "@/actions/todo";
 import { toast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
-import SubmitButton from "./SubmitButton";
 import { Label } from "./ui/label";
+import { TodoFormData, todoSchema } from "@/actions/todo/definitions";
+import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
+import SubmitButton from "./SubmitButton";
+import { useForm } from "react-hook-form";
 
 const AddTodo = () => {
   const [state, formAction] = useFormState(createTodo, undefined);
@@ -15,22 +18,50 @@ const AddTodo = () => {
   useEffect(() => {
     if (state?.message!) {
       toast({ title: state?.message! });
+      if (state?.message! === "Todo added successfully") {
+        reset();
+      }
     }
   }, [state]);
 
+  const {
+    register,
+    formState: { errors, isValid },
+    reset,
+  } = useForm<TodoFormData>({ resolver: zodResolver(todoSchema) });
+
   return (
-    <form action={formAction} className="w-full space-y-2 border rounded-lg p-2">
+    <form
+      action={formAction}
+      className="w-full space-y-2 border rounded-lg p-4"
+    >
       <div className="grid w-full gap-1.5">
         <Label htmlFor="message">Title</Label>
-        <Input id="title" name="title" className="" placeholder=" Enter a todo here"></Input>
-        <div> {state?.errors?.title && <p className="text-sm text-red-500">{state.errors.title}</p>}</div>
+        <Input
+          {...register("title")}
+          className=""
+          placeholder="Enter a todo here"
+        ></Input>
+        <div>
+          {errors.title && (
+            <p className="text-sm text-red-500">{errors.title.message}</p>
+          )}
+        </div>
       </div>
       <div className="grid w-full gap-1.5">
         <Label htmlFor="tododesc">Description</Label>
-        <Textarea id="description" name="description" placeholder="Type your todo description here." />
-        <div> {state?.errors?.description && <p className="text-sm text-red-500">{state.errors.description}</p>}</div>
+        <Textarea
+          {...register("description")}
+          id="description"
+          placeholder="Type your todo description here."
+        />
+        <div>
+          {errors.description && (
+            <p className="text-sm text-red-500">{errors.description.message}</p>
+          )}
+        </div>
       </div>
-      <SubmitButton buttonText="Add Todo" />
+      <SubmitButton buttonText="Add Todo" isValid={isValid} />
     </form>
   );
 };
