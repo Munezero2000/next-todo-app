@@ -16,7 +16,7 @@ export default async function Todos() {
   const todos = await getTodo(user?.id!);
 
   return (
-    <div className="w-full my-4">
+    <div className="w-full my-4 max-h-80">
       {todos.map((todo) => (
         <TodoCard key={todo.id} todo={todo} />
       ))}

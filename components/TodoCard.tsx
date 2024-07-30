@@ -4,8 +4,6 @@ import { todoType } from "@/types/todoTypes";
 import DeleteTodo from "./DeleteTodo";
 import { Checkbox } from "./ui/checkbox";
 import { toggleTodo } from "@/actions/todo";
-import { PopoverClose } from "@radix-ui/react-popover";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import clsx from "clsx";
 import { formatDate } from "@/lib/utils";
 import {
@@ -25,12 +23,16 @@ interface Props {
 
 const TodoCard = ({ todo }: Props) => {
   const [isChecked, setIsChecked] = useState(todo.completed);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
   const handleCheckboxChange = async () => {
     setIsChecked(!isChecked);
     const result = await toggleTodo(todo.id);
     toast({ title: result.message });
+  };
+
+  const handleUpdateSuccess = () => {
+    setIsUpdateDialogOpen(false);
   };
 
   const formattedDate = formatDate(todo.createdAt);
@@ -58,15 +60,18 @@ const TodoCard = ({ todo }: Props) => {
           <p className="text-xs text-slate-700">{`${formattedDate}`}</p>
         </div>
         <div className="flex gap-2 transition-all ease-in-out">
-          <Dialog>
+          <Dialog
+            open={isUpdateDialogOpen}
+            onOpenChange={setIsUpdateDialogOpen}
+          >
             <DialogTrigger className="bg-slate-950 hover:bg-slate-900 px-4 py-2 text-white rounded sm">
               Edit
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Update Todo</DialogTitle>
+                <DialogTitle className="my-2">Update Todo</DialogTitle>
                 <DialogDescription>
-                  <UpdateTodo todo={todo} />
+                  <UpdateTodo todo={todo} onSuccess={handleUpdateSuccess} />
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>
@@ -79,7 +84,7 @@ const TodoCard = ({ todo }: Props) => {
               <DialogHeader>
                 <DialogTitle>
                   <p className="font-normal my-1">
-                    Are you sure you want to delete this todo ?
+                    Are you sure you want to delete this todo?
                   </p>
                   <p className="font-medium my-2">{todo.title}</p>
                 </DialogTitle>
@@ -91,8 +96,6 @@ const TodoCard = ({ todo }: Props) => {
           </Dialog>
         </div>
       </div>
-
-      {/* {isEditing && />} */}
     </div>
   );
 };
