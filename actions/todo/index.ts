@@ -17,7 +17,10 @@ export const getTodo = async (id: string): Promise<todoType[]> => {
   return todos;
 };
 
-export async function createTodo(state: FormState, formData: FormData): Promise<FormState> {
+export async function createTodo(
+  state: FormState,
+  formData: FormData
+): Promise<FormState> {
   // validate form inputs
   const validatedFields = todoSchema.safeParse({
     title: formData.get("title") as string,
@@ -36,7 +39,10 @@ export async function createTodo(state: FormState, formData: FormData): Promise<
 
   // saving data to the database
   try {
-    const returnedTodo = await db.insert(todo).values({ title, description, createdBy: user?.id }).returning();
+    const returnedTodo = await db
+      .insert(todo)
+      .values({ title, description, createdBy: user?.id })
+      .returning();
 
     if (returnedTodo) {
       revalidatePath("/");
@@ -62,7 +68,10 @@ export async function deleteTodo(prevState: any, formData: FormData) {
   }
 }
 
-export async function updateTodo(state: FormState, formData: FormData): Promise<FormState> {
+export async function updateTodo(
+  state: FormState,
+  formData: FormData
+): Promise<FormState> {
   const id = formData.get("id") as string;
 
   const validatedFields = todoSchema.safeParse({
