@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import AddTodo from "@/components/AddTodo";
 import Todos from "@/components/Todos";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { logout } from "@/actions/auth";
-import { redirect } from "next/navigation";
 import Logout from "@/components/Logout";
 import { CopyPlus } from "lucide-react";
 

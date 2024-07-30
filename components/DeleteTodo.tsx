@@ -12,7 +12,7 @@ const initialState: { message: string | null } = {
 
 const DeleteTodo = ({ id }: { id: string }) => {
   const [state, formAction] = useFormState(deleteTodo, initialState);
-  
+
   useEffect(() => {
     if (state?.message!) {
       toast({ title: state?.message! });

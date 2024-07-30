@@ -112,15 +112,20 @@ export async function updateTodo(
 
 export const toggleTodo = async (id: string) => {
   try {
-    await db
+    const returnedTodo = await db
       .update(todo)
       .set({
         completed: not(todo.completed),
       })
-      .where(eq(todo.id, id));
-    revalidatePath("/");
-
-    return { message: "Successfully Marked" };
+      .where(eq(todo.id, id))
+      .returning();
+    if (returnedTodo[0].completed) {
+      revalidatePath("/");
+      return { message: "Todo marked as complete" };
+    } else {
+      revalidatePath("/");
+      return { message: "Todo added to the List of pending todos" };
+    }
   } catch (e) {
     return { message: "Failed to update todo" };
   }
