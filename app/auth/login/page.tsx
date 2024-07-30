@@ -10,9 +10,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginFormData, loginSchema } from "@/actions/auth/definitions";
 import { useFormState } from "react-dom";
+import { useEffect } from "react";
 
 const LoginForm = () => {
   const [state, formAction] = useFormState(login, undefined);
+  useEffect(() => {
+    if (state?.message!) {
+      toast({ title: state?.message! });
+    }
+  }, [state]);
   const {
     register,
     formState: { errors, isValid },
@@ -51,8 +57,8 @@ const LoginForm = () => {
             <div className="text-sm text-red-500">
               <p>Password must:</p>
               <ul>
-                {errors.password?.message!
-                  .split(". ")
+                {errors.password
+                  ?.message!.split(". ")
                   .map((error, index) => <li key={index}>- {error}</li>)}
               </ul>
             </div>

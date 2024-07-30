@@ -4,10 +4,19 @@ import { todoType } from "@/types/todoTypes";
 import DeleteTodo from "./DeleteTodo";
 import { Checkbox } from "./ui/checkbox";
 import { toggleTodo } from "@/actions/todo";
-import { Button } from "./ui/button";
+import { PopoverClose } from "@radix-ui/react-popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import clsx from "clsx";
-import UpdateTodo from "./UpdateTodo";
 import { formatDate } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import UpdateTodo from "./UpdateTodo";
 
 interface Props {
   todo: todoType;
@@ -22,9 +31,6 @@ const TodoCard = ({ todo }: Props) => {
     await toggleTodo(todo.id);
   };
 
-  const handleEditClick = () => {
-    setIsEditing(!isEditing);
-  };
   const formattedDate = formatDate(todo.createdAt);
   return (
     <div>
@@ -50,13 +56,41 @@ const TodoCard = ({ todo }: Props) => {
           <p className="text-xs text-slate-700">{`Created At: ${formattedDate}`}</p>
         </div>
         <div className="flex gap-2 transition-all ease-in-out">
-          <Button onClick={handleEditClick}>
-            {isEditing ? "Close" : "Edit"}
-          </Button>
-          <DeleteTodo id={todo.id} />
+          <Dialog>
+            <DialogTrigger className="bg-slate-950 hover:bg-slate-900 px-4 py-2 text-white rounded sm">
+              Edit
+            </DialogTrigger>
+            <DialogContent >
+              <DialogHeader>
+                <DialogTitle>Update Todo</DialogTitle>
+                <DialogDescription>
+                  <UpdateTodo todo={todo} />
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger className="bg-red-900 hover:bg-red-800 px-4 py-2 text-white rounded sm">
+              Delete
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  <p className="font-normal my-1">
+                    Are you sure you want to delete this todo ?
+                  </p>
+                  <p className="font-medium my-2">{todo.title}</p>
+                </DialogTitle>
+                <DialogDescription>
+                  <DeleteTodo id={todo.id} />
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
-      {isEditing && <UpdateTodo todo={todo} />}
+
+      {/* {isEditing && />} */}
     </div>
   );
 };

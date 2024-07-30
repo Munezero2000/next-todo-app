@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import AddTodo from "@/components/AddTodo";
 import Todos from "@/components/Todos";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { logout } from "@/actions/auth";
-import { redirect } from "next/navigation";
 import Logout from "@/components/Logout";
 import { CopyPlus } from "lucide-react";
 
@@ -18,13 +16,7 @@ const Page = () => {
         >
           Todo List Application
         </Link>
-        <div className="flex gap-3">
-          <Button className="flex gap-2">
-            <CopyPlus size="15px" />
-            Add
-          </Button>
-          <Logout />
-        </div>
+        <Logout />
       </div>
 
       <AddTodo />

@@ -10,10 +10,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { signupSchema } from "@/actions/auth/definitions";
+import { useFormState } from "react-dom";
+import { useEffect } from "react";
 
 type SignupFormData = z.infer<typeof signupSchema>;
 
 const SignupForm = () => {
+  const [state, formAction] = useFormState(signup, undefined);
+  useEffect(() => {
+    if (state?.message!) {
+      toast({ title: state?.message! });
+    }
+  }, [state]);
+
   const {
     register,
     formState: { errors, isValid },
@@ -24,7 +33,10 @@ const SignupForm = () => {
 
   return (
     <div className="w-full flex items-center justify-center">
-      <form className="w-3/4 md:w-1/2 mt-32 space-y-2 border rounded-lg p-4">
+      <form
+        action={formAction}
+        className="w-3/4 md:w-1/2 mt-32 space-y-2 border rounded-lg p-4"
+      >
         <h1 className="text-xl font-semibold text-center uppercase">
           Create an account here
         </h1>
